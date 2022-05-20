@@ -315,7 +315,8 @@ def timeMethod(
     if _func is None:
         return decorator_timer
     else:
-        return decorator_timer(_func)
+        # return decorator_timer(_func)
+        return _func
 
 
 @contextmanager
