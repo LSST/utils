@@ -391,7 +391,8 @@ class TemplateMeta(type):
                     obj = subclass.__dict__[name]
                     # copy over the static methods
                     isBuiltin = isinstance(obj, types.BuiltinFunctionType)
-                    isStatic = isinstance(obj, staticmethod)
+                    isStatic = callable(obj) and type(obj).__name__ == "nb_func" \
+                        or isinstance(obj, staticmethod)
                     if isBuiltin or isStatic:
                         if hasattr(cls, name):
                             raise AttributeError(conflictStr.format(name, "static", subclass))
