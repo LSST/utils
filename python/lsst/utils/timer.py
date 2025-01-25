@@ -19,6 +19,7 @@ __all__ = ["duration_from_timeMethod", "logInfo", "profile", "timeMethod", "time
 import datetime
 import functools
 import logging
+import socket
 import sys
 import time
 import traceback
@@ -27,6 +28,7 @@ from contextlib import contextmanager, suppress
 from typing import TYPE_CHECKING, Any
 
 from astropy import units as u
+import psutil
 
 from .introspection import find_outside_stacklevel
 from .logging import LsstLoggers
@@ -211,6 +213,10 @@ def logInfo(
         # Force a version number into the metadata.
         # v1: Ensure that max_rss field is always bytes.
         metadata["__version__"] = 1
+
+        # Add node information.
+        metadata["nodeName"] = socket.gethostname()
+        metadata["nodeCpuCount"] = psutil.cpu_count()
     if stacklevel is not None:
         # Account for the caller of this routine not knowing that we
         # are going one down in the stack.

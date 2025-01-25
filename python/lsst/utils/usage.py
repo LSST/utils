@@ -111,6 +111,8 @@ class _UsageInfo:
     blockOutputs: int
     voluntaryContextSwitches: int
     involuntaryContextSwitches: int
+    cpuPercent: float
+    """System-wide CPU utilization expressed as a percentage."""
 
     def dict(self) -> dict[str, float | int]:
         return dataclasses.asdict(self)
@@ -147,4 +149,5 @@ def _get_current_rusage(for_children: bool = False) -> _UsageInfo:
         blockOutputs=res.ru_oublock,
         voluntaryContextSwitches=res.ru_nvcsw,
         involuntaryContextSwitches=res.ru_nivcsw,
+        cpuPercent=psutil.cpu_percent(),
     )
