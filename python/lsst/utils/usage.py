@@ -114,7 +114,9 @@ class _UsageInfo:
     nodeCpuPercent: float
     """Node-wide CPU utilization expressed as a percentage."""
     nodeLoadAverage: float
-    """Number of node-wide processes in a runnable state over the last minute."""
+    """Number of node-wide runnable processes over the last 15 minutes."""
+    nodeCpuFreq: float
+    """Current CPU frequency in MHz (as reported by psutil.cpu_freq)"""
 
     def dict(self) -> dict[str, float | int]:
         return dataclasses.asdict(self)
@@ -152,5 +154,6 @@ def _get_current_rusage(for_children: bool = False) -> _UsageInfo:
         voluntaryContextSwitches=res.ru_nvcsw,
         involuntaryContextSwitches=res.ru_nivcsw,
         nodeCpuPercent=psutil.cpu_percent(),
-        nodeLoadAverage=psutil.getloadavg()[0],
+        nodeLoadAverage=psutil.getloadavg()[2],
+        nodeCpuFreq=psutil.cpu_freq(),
     )
